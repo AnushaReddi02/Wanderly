@@ -291,3 +291,5 @@ const sampleListings = [
 ];
 
 module.exports = { data: sampleListings };
+
+// Hey Node.js, when someone imports this file, give them an object that contains my sampleListings array under the name data.

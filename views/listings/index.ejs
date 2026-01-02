@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderly</title>
+</head>
+<body>
+    <h3>All Listings</h3>
+    <ul>
+    <% for(let listing of allListings){ %>
+        <li><a href="/listings/<%= listing._id %>"><%= listing.title %></a></li>
+        <!-- <a href="/listings/<%=listing._id %>"> -> Takes to "show" rout where individual listing is shown -->
+    <% } %>
+</ul>
+</body>
+</html>
+
+
+<!-- 
+    🔥Golden rule (remember this forever)
+
+    EJS executes inside HTML comments too
+    So never leave broken <% %> inside comments. 
+-->
+
+

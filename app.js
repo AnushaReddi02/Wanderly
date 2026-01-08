@@ -22,6 +22,7 @@ async function main(){
 
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
+app.use(express.urlencoded({extended:true}));
 
 //PORT : A number where your server listens
 //request goes to that port
@@ -51,7 +52,16 @@ app.get("/", (req,res)=>{
 app.get("/listings",async(req,res)=>{
     const allListings = await Listing.find({});
     res.render("listings/index.ejs",{allListings});
+});
+
+//Show Route : Show entire details of a specific listing(based on ID)
+app.get("/listings/:id", async(req,res)=>{
+    let {id} = req.params;
+    //Find the listing using id
+    const listing = await Listing.findById(id); //It gives entire listing not just id
+    res.render("listings/show.ejs",{listing});
 })
+
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.
 app.listen(PORT, () => {

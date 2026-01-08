@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderly</title>
+</head>
+<body>
+    <h3>Creating a New Route</h3>
+    <form action="/listings" method="POST">
+        <input type="text" name="listing[title]" placeholder="Enter title"> <br /><br />
+        <textarea rows="15" cols="30" type="text" name="listing[description]" placeholder="Enter description"> </textarea> <br /><br />
+        <input name="listing[image]" placeholder="Enter image URL/link" type="text"> <br /><br />
+        <input type="number" name="listing[price]" placeholder="Enter price"> <br /><br />
+        <input type="text" name="listing[country]" placeholder="Enter country"> <br /><br />
+        <input type="text" name="listing[location]" placeholder="Enter location"> <br /><br />
+
+        <button>ADD</button>
+    </form>
+</body>
+</html>
+
+<!-- 
+    IMPORTANT: Understanding name="listing[...]" in forms 🧠
+
+    The 'name' attribute controls how form data is sent to the server.
+
+    When we use:
+        name="listing[title]"
+
+    Express (with urlencoded parser) converts it into:
+        req.body = {
+            listing: {
+                title: "value entered by user"
+            }
+        }
+
+    So:
+        name="listing[description]"  → req.body.listing.description
+        name="listing[price]"        → req.body.listing.price
+        name="listing[country]"      → req.body.listing.country
+
+    Using this pattern groups all related fields inside ONE object called 'listing'.
+
+    This makes it easy to:
+        new Listing(req.body.listing)
+        and save directly to MongoDB.
+
+    RULE TO REMEMBER 🔒:
+    Only the 'name' attribute decides the structure of req.body.
+-->

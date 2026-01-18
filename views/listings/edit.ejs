@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderly</title>
+</head>
+<body>
+    <h3>Editing a Listing</h3>
+
+        <!-- Form to update a listing (POST is converted to PUT using method-override)
+        HTML forms support only GET and POST methods 
+        POST is used here to submit the form 
+        _method=PUT tells Express to treat this request as a PUT request 
+        This allows updating an existing listing 
+        listing._id ensures the correct listing is updated  -->
+
+    <form method="POST" action="/listings/<%=listing._id%>?_method=PUT">
+        <input type="text" name="listing[title]" value="<%= listing.title %>"> <br /><br />
+        <textarea rows="15" cols="30" type="text" name="listing[description]"><%= listing.description %></textarea> <br /><br />
+        <input name="listing[image]" value="<%= listing.image %>" type="text"> <br /><br />
+        <input type="number" name="listing[price]" value="<%= listing.price %>"> <br /><br />
+        <input type="text" name="listing[country]" value="<%= listing.country %>"> <br /><br />
+        <input type="text" name="listing[location]" value="<%= listing.location %>"> <br /><br />
+
+        <button>EDIT</button>
+    </form>
+</body>
+</html>

@@ -33,7 +33,7 @@ const app = express();
 const mongoose = require('mongoose');
 const Listing = require("./models/listing.js");
 const path =require('path');
-
+const methodOverride = require('method-override');
 
 
 
@@ -53,6 +53,7 @@ async function main(){
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
+app.use(methodOverride("_method"));
 
 //PORT : A number where your server listens
 //request goes to that port
@@ -107,6 +108,74 @@ app.get("/listings/:id", async(req,res)=>{
     res.render("listings/show.ejs",{listing});
 });
 
+//EDIT : Lets us edit an existing listing
+app.get("/listings/:id/edit",async(req,res)=>{
+    let {id} = req.params;
+    let listing = await Listing.findById(id);  // It creates a new document/object using the Listing model, filled with data coming from a form request.
+/* 
+    1️⃣ req -> Contains everything the client sends (form data, params, headers, etc.)
+    2️⃣ req.body -> Contains data sent from a POST request,Works only if you use: app.use(express.urlencoded({ extended: true })); OR app.use(express.json());
+    3️⃣ req.body.listing
+    This means your form data is structured like this:
+    <input name="listing[title]" />
+    <input name="listing[price]" />
+    <input name="listing[location]" />
+
+    So Express converts it into:
+    req.body = {
+      listing: {
+        title: "Beach House",
+        price: 5000,
+        location: "Goa"
+      }
+     } 
+    👉 We’re extracting only the listing object.
+    4️⃣ Listing : (blueprint for listings in MongoDB)
+        This is a Mongoose Model
+        Created earlier like:
+        const Listing = mongoose.model("Listing", listingSchema);
+
+    5️⃣ new Listing(req.body.listing)
+        Creates a new Listing object
+        But ❗ it is not saved to the database yet
+*/
+    res.render("listings/edit.ejs",{listing});
+});
+
+//UPDATE ROUTE
+app.put("/listings/:id",async(req,res)=>{
+    let {id} = req.params;
+    await Listing.findByIdAndUpdate(id,{...req.body.listing});
+       /*     { ...req.body.listing }
+        This part has two things going on:
+
+        1️⃣ req.body.listing
+        Contains the updated data sent from the edit form
+
+        Example:
+
+        req.body.listing = {
+        title: "New Title",
+        price: 2000,
+        location: "Goa"
+        };
+        2️⃣ ... (spread operator)
+        Copies all key–value pairs from req.body.listing
+
+        Turns them into a new object
+
+        So:
+
+        { ...req.body.listing }
+        becomes:
+
+        {
+        title: "New Title",
+        price: 2000,
+        location: "Goa"
+        }  */
+       res.redirect(`/listings/${id}`);
+});
 
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.

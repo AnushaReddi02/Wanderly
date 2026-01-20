@@ -34,6 +34,7 @@ const mongoose = require('mongoose');
 const Listing = require("./models/listing.js");
 const path =require('path');
 const methodOverride = require('method-override');
+const ejsMate = require("ejs-mate");
 
 
 
@@ -54,6 +55,7 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
+app.engine("ejs",ejsMate);
 
 //PORT : A number where your server listens
 //request goes to that port
@@ -190,3 +192,14 @@ app.delete("/listings/:id",async(req,res)=>{
 app.listen(PORT, () => {
     console.log(`Sever is listening on port ${PORT}`);
 });
+
+
+/* 
+    EJS-Mate is used to create a common layout for all pages
+    It avoids repeating HTML structure like <head>, navbar, and footer
+    <%- body %> dynamically injects page-specific content
+
+    include() is used for small reusable parts like navbar or footer
+    include() only inserts code, but EJS-Mate supports full page layouts
+    Advantage of EJS-Mate: cleaner code, less repetition, better scalability
+*/

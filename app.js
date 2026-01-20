@@ -177,6 +177,14 @@ app.put("/listings/:id",async(req,res)=>{
        res.redirect(`/listings/${id}`);
 });
 
+//DELETE Route
+app.delete("/listings/:id",async(req,res)=>{
+    let {id} = req.params;
+    let deletedListing = await Listing.findByIdAndDelete(id);
+    console.log(deletedListing);
+    res.redirect("/listings");
+});
+
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.
 app.listen(PORT, () => {

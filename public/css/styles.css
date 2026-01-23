@@ -1,3 +1,27 @@
-body{
+/* body{
     background-color: rgb(197, 91, 139);
+} */
+
+.navbar{
+    height: 5rem;
+    background-color: white;
+}
+
+
+/* 
+    Styles the logo icon
+    changes the defaukt color to #a3396e(pink)
+    increases the size of the icon
+ */
+.fa-earth-americas{
+    color: #a3396e;
+    font-size: 2rem;
+}
+
+/*
+    Navigation links (Home,Listing,..) Styling
+    Increases the appearance i.e., darkens the font color
+*/
+.nav-link{
+    color: #222222 !important;  /*!important : No matter what, make the text color #222222 */
 }

@@ -1,6 +1,6 @@
-/* body{
-    background-color: rgb(197, 91, 139);
-} */
+body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+}
 
 .navbar{
     height: 5rem;
@@ -54,4 +54,46 @@
     justify-content: center;
     flex-wrap: wrap;
     align-items: space-evenly;
+    background-color: azure;
+}
+
+/* Cards */
+.card{
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100%;
+    object-fit: cover !important;
+
+    /* 
+     object-fit: cover
+    👉 It fills the container completely
+    👉 Keeps the aspect ratio
+    👉 Crops extra parts if needed
+    👉 No stretching, no distortion ✅ */
+}
+
+.card-body{
+    padding: 0; /*Removes padding around text */
+}
+
+.card-text{
+    font-weight: 400 !important;
+}
+
+.listing-link{
+    text-decoration: none;
+}
+
+/* Card Effect */
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
 }

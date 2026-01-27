@@ -109,3 +109,18 @@ body{
     background-color: #fe424d !important;
     border: none !important;
 }
+
+/* Show page */
+.show-img{
+    height: 30vh;
+}
+
+.show-card{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.btns{
+    display: flex;
+    margin-bottom: 20px;
+}

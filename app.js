@@ -35,6 +35,7 @@ const Listing = require("./models/listing.js");
 const path =require('path');
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync.js");
 app.use(express.static(path.join(__dirname,"/public")));
 
 
@@ -93,14 +94,15 @@ app.get("/listings/new",(req,res)=>{
 });
 
 //Create Route : Adds the newly created route to database
-app.post("/listings", async(req,res)=>{
+app.post("/listings", wrapAsync(async(req,res,next)=>{
     // let {title,description,image,price,country,location} = req.body;
     // new Listing(req.body.listing)
     // let listing = req.body.listing;
-    let newListing = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listings");
-});
+        let newListing = new Listing(req.body.listing);
+        await newListing.save();
+        res.redirect("/listings");
+    })
+);
 
 //Show Route : Show entire details of a specific listing(based on ID)
 app.get("/listings/:id", async(req,res)=>{
@@ -189,6 +191,12 @@ app.delete("/listings/:id",async(req,res)=>{
 
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.
+
+//CUSTOM ERROR HANDLER
+app.use((err,req,res,next) => {
+    res.send("!!! Something Went Wrong !!!");
+});
+
 app.listen(PORT, () => {
     console.log(`Sever is listening on port ${PORT}`);
 });

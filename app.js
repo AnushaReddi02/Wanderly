@@ -226,7 +226,7 @@ app.use((err,req,res,next) => {
     "404 - Page Not Found" response to the client. */
     
     let {statusCode = 500,message = "Something Went Wrong"} = err;
-    res.status(statusCode).send(message);
+    res.render("error.ejs",{err});
 });
 
 app.listen(PORT, () => {

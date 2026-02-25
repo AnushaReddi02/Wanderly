@@ -36,7 +36,9 @@ const path =require('path');
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
+const CustomErrorHandler = require("./utils/CustomErrorHandler.js");
 app.use(express.static(path.join(__dirname,"/public")));
+
 
 
 const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderly';
@@ -64,6 +66,8 @@ app.engine("ejs",ejsMate);
 // Hosting platforms assign ports dynamically
 const PORT = process.env.PORT || 3000;
 
+
+
 app.get("/", (req,res)=>{
     res.send("Hi I am Home page!");
 });
@@ -83,10 +87,10 @@ app.get("/", (req,res)=>{
 // })
 
 //Index Route
-app.get("/listings",async(req,res)=>{
+app.get("/listings",wrapAsync(async(req,res)=>{
     const allListings = await Listing.find({});
     res.render("listings/index.ejs",{allListings});
-});
+}));
 
 //New Route : Used to create a new listing
 app.get("/listings/new",(req,res)=>{
@@ -98,6 +102,13 @@ app.post("/listings", wrapAsync(async(req,res,next)=>{
     // let {title,description,image,price,country,location} = req.body;
     // new Listing(req.body.listing)
     // let listing = req.body.listing;
+    if(!req.body.listing){
+        /*
+          This validation checks if the required object exists in the request body and throws a 400 Bad Request error if not,
+           preventing invalid data from being processed. */
+
+        throw new CustomErrorHandler(400,"Send Valid Data for Listimg");
+      }
         let newListing = new Listing(req.body.listing);
         await newListing.save();
         res.redirect("/listings");
@@ -105,15 +116,15 @@ app.post("/listings", wrapAsync(async(req,res,next)=>{
 );
 
 //Show Route : Show entire details of a specific listing(based on ID)
-app.get("/listings/:id", async(req,res)=>{
+app.get("/listings/:id", wrapAsync(async(req,res)=>{
     let {id} = req.params;
     //Find the listing using id
     const listing = await Listing.findById(id); //It gives entire listing not just id
     res.render("listings/show.ejs",{listing});
-});
+}));
 
 //EDIT : Lets us edit an existing listing
-app.get("/listings/:id/edit",async(req,res)=>{
+app.get("/listings/:id/edit",wrapAsync(async(req,res)=>{
     let {id} = req.params;
     let listing = await Listing.findById(id);  // It creates a new document/object using the Listing model, filled with data coming from a form request.
 /* 
@@ -144,10 +155,10 @@ app.get("/listings/:id/edit",async(req,res)=>{
         But ❗ it is not saved to the database yet
 */
     res.render("listings/edit.ejs",{listing});
-});
+}));
 
 //UPDATE ROUTE
-app.put("/listings/:id",async(req,res)=>{
+app.put("/listings/:id",wrapAsync(async(req,res)=>{
     let {id} = req.params;
     await Listing.findByIdAndUpdate(id,{...req.body.listing});
        /*     { ...req.body.listing }
@@ -179,22 +190,43 @@ app.put("/listings/:id",async(req,res)=>{
         location: "Goa"
         }  */
        res.redirect(`/listings/${id}`);
-});
+}));
 
 //DELETE Route
-app.delete("/listings/:id",async(req,res)=>{
+app.delete("/listings/:id",wrapAsync(async(req,res)=>{
     let {id} = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
     res.redirect("/listings");
-});
+}));
 
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.
 
+
+
+/* Catch all routes that are not defined (404 handler)
+app.all("*") matches any HTTP method and any route
+If no route is found, create a custom 404 error
+Pass error to centralized error-handling middleware */
+
+//app.all("*",(req,res,next) => {
+//    next(new CustomErrorHandler(404,"Page Not Found"));
+//});
+
+app.use((req,res,next)=>{
+    res.status(404).send("404 - Page Not Found");
+});
+
 //CUSTOM ERROR HANDLER
 app.use((err,req,res,next) => {
-    res.send("!!! Something Went Wrong !!!");
+    /* Global 404 handler.
+    Express executes middleware in order, so when no route matches,
+    this middleware catches the request and sends a
+    "404 - Page Not Found" response to the client. */
+    
+    let {statusCode = 500,message = "Something Went Wrong"} = err;
+    res.status(statusCode).send(message);
 });
 
 app.listen(PORT, () => {

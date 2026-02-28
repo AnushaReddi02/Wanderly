@@ -37,6 +37,7 @@ const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const CustomErrorHandler = require("./utils/CustomErrorHandler.js");
+const {listingSchema} = require("./schema.js")
 app.use(express.static(path.join(__dirname,"/public")));
 
 
@@ -86,6 +87,16 @@ app.get("/", (req,res)=>{
 //    res.send("Sucessful testing");
 // })
 
+const validateListing = (req,res,next) => {
+    let {error} = listingSchema.validate(req.body);
+        if(error){
+            let errorMessage = error.details.map((el) => el.message).join(",");
+            throw new CustomErrorHandler(400,errorMessage);
+        }else{
+            next();
+        }
+}
+
 //Index Route
 app.get("/listings",wrapAsync(async(req,res)=>{
     const allListings = await Listing.find({});
@@ -98,17 +109,17 @@ app.get("/listings/new",(req,res)=>{
 });
 
 //Create Route : Adds the newly created route to database
-app.post("/listings", wrapAsync(async(req,res,next)=>{
+app.post("/listings", validateListing, wrapAsync(async(req,res,next)=>{
     // let {title,description,image,price,country,location} = req.body;
     // new Listing(req.body.listing)
     // let listing = req.body.listing;
-    if(!req.body.listing){
+    //if(!req.body.listing){
         /*
           This validation checks if the required object exists in the request body and throws a 400 Bad Request error if not,
            preventing invalid data from being processed. */
 
-        throw new CustomErrorHandler(400,"Send Valid Data for Listimg");
-      }
+        //throw new CustomErrorHandler(400,"Send Valid Data for Listimg");
+     // }
         let newListing = new Listing(req.body.listing);
         await newListing.save();
         res.redirect("/listings");

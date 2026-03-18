@@ -28,7 +28,13 @@ const listingSchema = new Schema({
     }, 
     price : Number,
     location : String,
-    country : String
+    country : String,
+    reviews : [
+        {
+            type : Schema.Types.ObjectId,   //All the reviews related to the particular listing will be stored here
+            ref : "Review"
+        }
+    ]
 });
 
 //Creating a model using listingSchema

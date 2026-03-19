@@ -37,7 +37,7 @@ const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const CustomErrorHandler = require("./utils/CustomErrorHandler.js");
-const {listingSchema} = require("./schema.js")
+const {listingSchema,reviewSchema} = require("./schema.js")
 const Review = require("./models/review.js");
 
 app.use(express.static(path.join(__dirname,"/public")));
@@ -99,6 +99,17 @@ const validateListing = (req,res,next) => {
             next();
         }
 }
+
+const validateReview = (req,res,next) => {
+    let {error} = reviewSchema.validate(req.body);
+        if(error){
+            let errorMessage = error.details.map((el) => el.message).join(",");
+            throw new CustomErrorHandler(400,errorMessage);
+        }else{
+            next();
+        }
+}
+
 
 //Index Route
 app.get("/listings",wrapAsync(async(req,res)=>{
@@ -215,7 +226,7 @@ app.delete("/listings/:id",wrapAsync(async(req,res)=>{
 }));
 
 // CREATE REVIEW ROUTE
-app.post("/listings/:id/reviews", async (req, res) => {
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
 
     // 1️⃣ Get listing ID from URL params
     const { id } = req.params;
@@ -241,7 +252,7 @@ app.post("/listings/:id/reviews", async (req, res) => {
 
     // 8️⃣ Redirect user (important)
     res.redirect(`/listings/${id}`);
-});
+}));
 
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.

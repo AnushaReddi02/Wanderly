@@ -38,7 +38,10 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const CustomErrorHandler = require("./utils/CustomErrorHandler.js");
 const {listingSchema} = require("./schema.js")
+const Review = require("./models/review.js");
+
 app.use(express.static(path.join(__dirname,"/public")));
+
 
 
 
@@ -210,6 +213,35 @@ app.delete("/listings/:id",wrapAsync(async(req,res)=>{
     console.log(deletedListing);
     res.redirect("/listings");
 }));
+
+// CREATE REVIEW ROUTE
+app.post("/listings/:id/reviews", async (req, res) => {
+
+    // 1️⃣ Get listing ID from URL params
+    const { id } = req.params;
+
+    // 2️⃣ Find the corresponding listing in database
+    const listing = await Listing.findById(id);
+
+    // 3️⃣ Create a new review using form data
+    const newReview = new Review(req.body.review);
+
+    // 4️⃣ Add review reference to listing's reviews array
+    listing.reviews.push(newReview);
+
+    // 5️⃣ Save review to database
+    await newReview.save();
+
+    // 6️⃣ Save updated listing (with new review added)
+    await listing.save();
+
+    // 7️⃣ Log success message (for debugging)
+    console.log("Review created and saved successfully!");
+    console.log("Listing updated with new review!");
+
+    // 8️⃣ Redirect user (important)
+    res.redirect(`/listings/${id}`);
+});
 
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.

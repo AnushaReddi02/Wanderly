@@ -144,7 +144,7 @@ app.post("/listings", validateListing, wrapAsync(async(req,res,next)=>{
 app.get("/listings/:id", wrapAsync(async(req,res)=>{
     let {id} = req.params;
     //Find the listing using id
-    const listing = await Listing.findById(id); //It gives entire listing not just id
+    const listing = await Listing.findById(id).populate("reviews"); //It gives entire listing not just id
     res.render("listings/show.ejs",{listing});
 }));
 

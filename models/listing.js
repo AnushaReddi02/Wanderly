@@ -10,6 +10,7 @@
 //Import mongoose
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema //we can use Schema instead of writing mongoose.Scheema everytime.
+const Review = require("./review.js");
 
 const listingSchema = new Schema({
     title : {
@@ -35,6 +36,18 @@ const listingSchema = new Schema({
             ref : "Review"
         }
     ]
+});
+
+// Mongoose post middleware for cascading delete
+// This runs after a listing is deleted
+listingSchema.post("findOneAndDelete",async(listing) => {
+    console.log("🔥 Middleware triggered");
+     // Check if listing exists
+    if(listing){
+        // Delete all reviews whose IDs are present in listing.reviews
+        // $in operator matches all review IDs in the array
+        await Review.deleteMany({_id : {$in : listing.reviews}});
+    }
 });
 
 //Creating a model using listingSchema

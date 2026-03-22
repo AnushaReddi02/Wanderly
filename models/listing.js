@@ -20,11 +20,11 @@ const listingSchema = new Schema({
     description : String,
     image : {
         type : String,
-        default : "https://unsplash.com/photos/green-leafed-tree-surrounded-by-fog-during-daytime-S297j2CsdlM",
+        default : "https://loveincorporated.blob.core.windows.net/contentimages/gallery/9654ee5a-21be-49f4-9886-ef78e9672c77-Ushguli-shutterstock_2191029449.jpg",
         // Setter function: assigns a default image link when no image is provided
         set : (v) =>
              v === "" 
-                ? "https://unsplash.com/photos/green-leafed-tree-surrounded-by-fog-during-daytime-S297j2CsdlM"
+                ? "https://loveincorporated.blob.core.windows.net/contentimages/gallery/9654ee5a-21be-49f4-9886-ef78e9672c77-Ushguli-shutterstock_2191029449.jpg"
                 : v
     }, 
     price : Number,

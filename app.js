@@ -31,19 +31,15 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const Listing = require("./models/listing.js");
 const path =require('path');
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
-const wrapAsync = require("./utils/wrapAsync.js");
-const CustomErrorHandler = require("./utils/CustomErrorHandler.js");
-const {listingSchema,reviewSchema} = require("./schema.js")
-const Review = require("./models/review.js");
 
 app.use(express.static(path.join(__dirname,"/public")));
 
-
-
+//ROUTES
+const listings = require("./routes/listing.js");
+const reviews = require("./routes/review.js");
 
 const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderly';
 
@@ -90,185 +86,10 @@ app.get("/", (req,res)=>{
 //    res.send("Sucessful testing");
 // })
 
-const validateListing = (req,res,next) => {
-    let {error} = listingSchema.validate(req.body);
-        if(error){
-            let errorMessage = error.details.map((el) => el.message).join(",");
-            throw new CustomErrorHandler(400,errorMessage);
-        }else{
-            next();
-        }
-}
-
-const validateReview = (req,res,next) => {
-    let {error} = reviewSchema.validate(req.body);
-        if(error){
-            let errorMessage = error.details.map((el) => el.message).join(",");
-            throw new CustomErrorHandler(400,errorMessage);
-        }else{
-            next();
-        }
-}
 
 
-//Index Route
-app.get("/listings",wrapAsync(async(req,res)=>{
-    const allListings = await Listing.find({});
-    res.render("listings/index.ejs",{allListings});
-}));
-
-//New Route : Used to create a new listing
-app.get("/listings/new",(req,res)=>{
-    res.render("listings/new.ejs");
-});
-
-//Create Route : Adds the newly created route to database
-app.post("/listings", validateListing, wrapAsync(async(req,res,next)=>{
-    // let {title,description,image,price,country,location} = req.body;
-    // new Listing(req.body.listing)
-    // let listing = req.body.listing;
-    //if(!req.body.listing){
-        /*
-          This validation checks if the required object exists in the request body and throws a 400 Bad Request error if not,
-           preventing invalid data from being processed. */
-
-        //throw new CustomErrorHandler(400,"Send Valid Data for Listimg");
-     // }
-        let newListing = new Listing(req.body.listing);
-        await newListing.save();
-        res.redirect("/listings");
-    })
-);
-
-//Show Route : Show entire details of a specific listing(based on ID)
-app.get("/listings/:id", wrapAsync(async(req,res)=>{
-    let {id} = req.params;
-    //Find the listing using id
-    const listing = await Listing.findById(id).populate("reviews"); //It gives entire listing not just id
-    res.render("listings/show.ejs",{listing});
-}));
-
-//EDIT : Lets us edit an existing listing
-app.get("/listings/:id/edit",wrapAsync(async(req,res)=>{
-    let {id} = req.params;
-    let listing = await Listing.findById(id);  // It creates a new document/object using the Listing model, filled with data coming from a form request.
-/* 
-    1️⃣ req -> Contains everything the client sends (form data, params, headers, etc.)
-    2️⃣ req.body -> Contains data sent from a POST request,Works only if you use: app.use(express.urlencoded({ extended: true })); OR app.use(express.json());
-    3️⃣ req.body.listing
-    This means your form data is structured like this:
-    <input name="listing[title]" />
-    <input name="listing[price]" />
-    <input name="listing[location]" />
-
-    So Express converts it into:
-    req.body = {
-      listing: {
-        title: "Beach House",
-        price: 5000,
-        location: "Goa"
-      }
-     } 
-    👉 We’re extracting only the listing object.
-    4️⃣ Listing : (blueprint for listings in MongoDB)
-        This is a Mongoose Model
-        Created earlier like:
-        const Listing = mongoose.model("Listing", listingSchema);
-
-    5️⃣ new Listing(req.body.listing)
-        Creates a new Listing object
-        But ❗ it is not saved to the database yet
-*/
-    res.render("listings/edit.ejs",{listing});
-}));
-
-//UPDATE ROUTE
-app.put("/listings/:id",wrapAsync(async(req,res)=>{
-    let {id} = req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});
-       /*     { ...req.body.listing }
-        This part has two things going on:
-
-        1️⃣ req.body.listing
-        Contains the updated data sent from the edit form
-
-        Example:
-
-        req.body.listing = {
-        title: "New Title",
-        price: 2000,
-        location: "Goa"
-        };
-        2️⃣ ... (spread operator)
-        Copies all key–value pairs from req.body.listing
-
-        Turns them into a new object
-
-        So:
-
-        { ...req.body.listing }
-        becomes:
-
-        {
-        title: "New Title",
-        price: 2000,
-        location: "Goa"
-        }  */
-       res.redirect(`/listings/${id}`);
-}));
-
-//DELETE Route
-app.delete("/listings/:id",wrapAsync(async(req,res)=>{
-    let {id} = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-    res.redirect("/listings");
-}));
-
-// CREATE REVIEW ROUTE
-app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
-
-    // 1️⃣ Get listing ID from URL params
-    const { id } = req.params;
-
-    // 2️⃣ Find the corresponding listing in database
-    const listing = await Listing.findById(id);
-
-    // 3️⃣ Create a new review using form data
-    const newReview = new Review(req.body.review);
-
-    // 4️⃣ Add review reference to listing's reviews array
-    listing.reviews.push(newReview);
-
-    // 5️⃣ Save review to database
-    await newReview.save();
-
-    // 6️⃣ Save updated listing (with new review added)
-    await listing.save();
-
-    // 7️⃣ Log success message (for debugging)
-    console.log("Review created and saved successfully!");
-    console.log("Listing updated with new review!");
-
-    // 8️⃣ Redirect user (important)
-    res.redirect(`/listings/${id}`);
-}));
-
-// DELETE REVIEW ROUTE
-app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
-
-    const { id, reviewId } = req.params;
-
-    // Remove review reference from listing
-    await Listing.findByIdAndUpdate(id, {
-        $pull: { reviews: reviewId }
-    });
-
-    // Delete review from database
-    await Review.findByIdAndDelete(reviewId);
-
-    res.redirect(`/listings/${id}`);
-}));
+app.use("/listings",listings);
+app.use("/listings/:id/reviews",reviews);
 
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.

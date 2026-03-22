@@ -254,6 +254,22 @@ app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => 
     res.redirect(`/listings/${id}`);
 }));
 
+// DELETE REVIEW ROUTE
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
+
+    const { id, reviewId } = req.params;
+
+    // Remove review reference from listing
+    await Listing.findByIdAndUpdate(id, {
+        $pull: { reviews: reviewId }
+    });
+
+    // Delete review from database
+    await Review.findByIdAndDelete(reviewId);
+
+    res.redirect(`/listings/${id}`);
+}));
+
 // Starts the Express server and listens for incoming requests on the specified port
 // Without this line → your app does NOTHING.
 

@@ -34,9 +34,17 @@ const mongoose = require('mongoose');
 const path =require('path');
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
+const session = require('express-session');
 
 app.use(express.static(path.join(__dirname,"/public")));
 
+const sessionOptions = {
+    secret : "mysupersecretcode",
+    resave:false,
+    saveUninitializec : true
+};
+
+app.use(session(sessionOptions));
 //ROUTES
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");

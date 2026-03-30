@@ -51,6 +51,10 @@ router.get("/:id", wrapAsync(async(req,res)=>{
     let {id} = req.params;
     //Find the listing using id
     const listing = await Listing.findById(id).populate("reviews"); //It gives entire listing not just id
+    if(!listing){
+        req.flash("error","❌ Listing you requested for doesen't exist");
+        return res.redirect("/listings")
+    }
     res.render("listings/show.ejs",{listing});
 }));
 
@@ -85,6 +89,10 @@ router.get("/:id/edit",wrapAsync(async(req,res)=>{
         Creates a new Listing object
         But ❗ it is not saved to the database yet
 */
+    if(!listing){
+        req.flash("error","❌ Listing you requested for doesen't exist");
+        return res.redirect("/listings")
+    }
     req.flash("success","Edited Listing Sucessfully 🎉");
     res.render("listings/edit.ejs",{listing});
 }));
@@ -130,6 +138,10 @@ router.delete("/:id",wrapAsync(async(req,res)=>{
     let {id} = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
+    if(!listing){
+        req.flash("error","❌ Listing you requested for doesen't exist");
+        return res.redirect("/listings")
+    }
     req.flash("success","❗Listing Deleted!");
     res.redirect("/listings");
 }));

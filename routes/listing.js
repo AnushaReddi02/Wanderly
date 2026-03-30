@@ -41,7 +41,7 @@ router.post("/", validateListing, wrapAsync(async(req,res,next)=>{
      // }
         let newListing = new Listing(req.body.listing);
         await newListing.save();
-        req.flash("success","New Listing Created!");
+        req.flash("success","New Listing Created 🎉");
         res.redirect("/listings");
     })
 );
@@ -85,6 +85,7 @@ router.get("/:id/edit",wrapAsync(async(req,res)=>{
         Creates a new Listing object
         But ❗ it is not saved to the database yet
 */
+    req.flash("success","Edited Listing Sucessfully 🎉");
     res.render("listings/edit.ejs",{listing});
 }));
 
@@ -120,6 +121,7 @@ router.put("/:id",wrapAsync(async(req,res)=>{
         price: 2000,
         location: "Goa"
         }  */
+       req.flash("success","Listing Updateded 🎉");
        res.redirect(`/listings/${id}`);
 }));
 
@@ -128,6 +130,7 @@ router.delete("/:id",wrapAsync(async(req,res)=>{
     let {id} = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
+    req.flash("success","❗Listing Deleted!");
     res.redirect("/listings");
 }));
 

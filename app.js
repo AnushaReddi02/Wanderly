@@ -36,6 +36,9 @@ const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
 const session = require('express-session');
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-loval");
+const User = require("./models/user.js");
 
 app.use(express.static(path.join(__dirname,"/public")));
 
@@ -102,11 +105,32 @@ app.get("/", (req,res)=>{
 app.use(session(sessionOptions));
 app.use(flash());
 
+// Initialize Passport
+app.use(passport.initialize());
+
+// Enable persistent login sessions
+app.use(passport.session());
+
+// Configure Passport to use Local Strategy (username + password authentication)
+// User.authenticate() is provided by passport-local-mongoose
+passport.use(new LocalStrategy(User.authenticate()));
+
+// Serialize user: decides what data of the user is stored in the session
+// Here, it stores only the user ID in the session
+passport.serializeUser(User.serializeUser());
+
+// Deserialize user: retrieves full user details from the database using the stored ID
+// The retrieved user object is attached to req.user in every request
+passport.deserializeUser(User.deserializeUser());
+
+
 app.use((req,res,next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
-})
+});
+
+
 
 app.use("/listings",listings);
 app.use("/listings/:id/reviews",reviews);

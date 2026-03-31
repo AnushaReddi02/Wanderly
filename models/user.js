@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 // Import passport-local-mongoose plugin
 // This plugin simplifies username + password authentication
-const passportLocalMongoose = require("passport-local-mongoose");
+const passportLocalMongoose = require("passport-local-mongoose").default || require("passport-local-mongoose");
 
 // Define User Schema
 const userSchema = new Schema({

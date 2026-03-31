@@ -37,7 +37,7 @@ const ejsMate = require("ejs-mate");
 const session = require('express-session');
 const flash = require("connect-flash");
 const passport = require("passport");
-const LocalStrategy = require("passport-loval");
+const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/user.js");
 
 app.use(express.static(path.join(__dirname,"/public")));
@@ -130,7 +130,25 @@ app.use((req,res,next) => {
     next();
 });
 
+// Demo route to create and register a fake user (for testing purposes)
+app.get("/demoUser", async (req, res) => {
 
+    // Create a new user object (without password)
+    let fakeUser = new User({
+        email: "a@gmail.com",
+        username: "fakeUser1"
+    });
+
+    // Register the user using passport-local-mongoose
+    // This method automatically:
+    // 1. Hashes the password
+    // 2. Stores the user in the database
+    // 3. Adds salt + hash fields
+    let registeredUser = await User.register(fakeUser, "DummyPassword123");
+
+    // Send the registered user as response
+    res.send(registeredUser);
+});
 
 app.use("/listings",listings);
 app.use("/listings/:id/reviews",reviews);

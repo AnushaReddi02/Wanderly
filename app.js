@@ -133,13 +133,13 @@ app.use((req,res,next) => {
 });
 
 // Demo route to create and register a fake user (for testing purposes)
-app.get("/demoUser", async (req, res) => {
+/*    app.get("/demoUser", async (req, res) => {
 
     // Create a new user object (without password)
     let fakeUser = new User({
         email: "a@gmail.com",
         username: "fakeUser1"
-    });
+    }); 
 
     // Register the user using passport-local-mongoose
     // This method automatically:
@@ -150,7 +150,7 @@ app.get("/demoUser", async (req, res) => {
 
     // Send the registered user as response
     res.send(registeredUser);
-});
+});  */
 
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);

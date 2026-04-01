@@ -31,4 +31,14 @@ router.post("/login",passport.authenticate("local",{failureRedirect:"/login",fai
     req.flash("success","Welcome back, traveler. The world is waiting for your next story ✨");
     res.redirect("/listings");
 });
+
+router.get("/logout",(req,res) => {
+    req.logout((err) => {
+        if(err){
+            return next(err);
+        }
+        req.flash("success","Loggedout Successfully");
+        res.redirect("/listings");
+    })
+})
 module.exports = router;

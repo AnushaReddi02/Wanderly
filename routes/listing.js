@@ -4,7 +4,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const CustomErrorHandler = require("../utils/CustomErrorHandler.js");
 const {listingSchema} = require("../schema.js");
 const Listing = require("../models/listing.js");
-const {isLoggedIn,isOwner,validateListing} = require("../middleware.js");
+const {isLoggedIn,isOwner,validateListing} = require("../middlewares.js");
 const listingController = require("../controllers/listings.js");
 
 const validateListing = (req,res,next) => {
@@ -38,6 +38,6 @@ router.get("/:id/edit", isLoggedIn, wrapAsync(listingController.editListing));
 router.put("/:id", isLoggedIn, wrapAsync(listingController.updateListing));
 
 //DELETE Route
-router.delete("/:id",wrapAsync(listingController.destroyListing));
+router.delete("/:id", isLoggedIn, wrapAsync(listingController.destroyListing));
 
 module.exports = router;

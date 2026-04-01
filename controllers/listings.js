@@ -14,6 +14,11 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.renderNewForm = (req,res)=>{
+    console.log(req.user);
+    if(!req.authenticated()){
+        req.flash("error","⚠️ You must login to Add a Listing");
+       return res.redirect("/login");
+    }
     res.render("listings/new.ejs");
 };
 
@@ -21,10 +26,6 @@ module.exports.showListing = async(req,res)=>{
     let {id} = req.params;
     //Find the listing using id
     const listing = await Listing.findById(id).populate("reviews"); //It gives entire listing not just id
-    if(!listing){
-        req.flash("error","❌ Listing you requested for doesen't exist");
-        return res.redirect("/listings")
-    }
     res.render("listings/show.ejs",{listing});
 };
 

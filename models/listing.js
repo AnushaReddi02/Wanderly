@@ -35,7 +35,11 @@ const listingSchema = new Schema({
             type : Schema.Types.ObjectId,   //All the reviews related to the particular listing will be stored here
             ref : "Review"
         }
-    ]
+    ],
+    owner : {
+        type : Schema.Types.ObjectId,
+        ref : "User"
+    }
 });
 
 // Mongoose post middleware for cascading delete

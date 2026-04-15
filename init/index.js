@@ -18,6 +18,10 @@ async function main(){
 
 const initDB = async () => {
     await Listing.deleteMany({}); //Clears already present data from Listing collection
+    // Loop through each object in initData.data array
+    initData.data = initData.data.map((obj) => ({
+        ...obj, // copy all existing properties from obj
+        owner:"69cb3cff452a6310f6e9611c"})); // add new property 'owner'
     await Listing.insertMany(initData.data); //Adds the data from data.js into the Listing collection
 
 

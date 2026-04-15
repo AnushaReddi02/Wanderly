@@ -25,7 +25,7 @@ module.exports.renderNewForm = (req,res)=>{
 module.exports.showListing = async(req,res)=>{
     let {id} = req.params;
     //Find the listing using id
-    const listing = await Listing.findById(id).populate("reviews"); //It gives entire listing not just id
+    const listing = await Listing.findById(id).populate("reviews").populate("owner"); //It gives entire listing not just id
     res.render("listings/show.ejs",{listing});
 };
 
@@ -41,6 +41,7 @@ module.exports.createListing = async(req,res,next)=>{
         //throw new CustomErrorHandler(400,"Send Valid Data for Listimg");
      // }
         let newListing = new Listing(req.body.listing);
+        newListing.owner = req.user._id;
         await newListing.save();
         req.flash("success","New Listing Created 🎉");
         res.redirect("/listings");

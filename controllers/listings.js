@@ -15,7 +15,7 @@ module.exports.index = async (req, res) => {
 
 module.exports.renderNewForm = (req,res)=>{
     console.log(req.user);
-    if(!req.authenticated()){
+    if(!req.isAuthenticated()){
         req.flash("error","⚠️ You must login to Add a Listing");
        return res.redirect("/login");
     }
@@ -124,10 +124,16 @@ module.exports.destroyListing = async(req,res)=>{
     let {id} = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
-    if(!listing){
+    if(!deletedListing){
         req.flash("error","❌ Listing you requested for doesen't exist");
         return res.redirect("/listings")
     }
     req.flash("success","❗Listing Deleted!");
     res.redirect("/listings");
 };
+
+
+
+
+// <% if(currentUser && currentUser._id.equals(listing.owner._id)) {%> 
+// <% } %> 

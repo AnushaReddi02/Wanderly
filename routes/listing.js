@@ -1,21 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-const CustomErrorHandler = require("../utils/CustomErrorHandler.js");
-const {listingSchema} = require("../schema.js");
 const Listing = require("../models/listing.js");
 const {isLoggedIn,isOwner,validateListing} = require("../middlewares.js");
 const listingController = require("../controllers/listings.js");
 
-const validateListing = (req,res,next) => {
-    let {error} = listingSchema.validate(req.body);
-        if(error){
-            let errorMessage = error.details.map((el) => el.message).join(",");
-            throw new CustomErrorHandler(400,errorMessage);
-        }else{
-            next();
-        }
-}
+
 
 //Index Route
 router.get("/",wrapAsync(listingController.index));
@@ -27,17 +17,17 @@ router.get("/new", isLoggedIn, listingController.renderNewForm);
 router.get("/:id", wrapAsync(listingController.showListing));
 
 //Create Route : Adds the newly created route to database
-router.post("/", isLoggedIn, validateListing, wrapAsync(listingController.creatingListing)
+router.post("/", isLoggedIn, validateListing, wrapAsync(listingController.createListing)
 );
 
 
 //EDIT : Lets us edit an existing listing
-router.get("/:id/edit", isLoggedIn, wrapAsync(listingController.editListing));
+router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.editListing));
 
 //UPDATE ROUTE
-router.put("/:id", isLoggedIn, wrapAsync(listingController.updateListing));
+router.put("/:id", isLoggedIn,isOwner, wrapAsync(listingController.updateListing));
 
 //DELETE Route
-router.delete("/:id", isLoggedIn, wrapAsync(listingController.destroyListing));
+router.delete("/:id", isLoggedIn,isOwner, wrapAsync(listingController.destroyListing));
 
 module.exports = router;

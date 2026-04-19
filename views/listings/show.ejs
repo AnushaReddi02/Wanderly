@@ -17,18 +17,21 @@
                     <p class="card-text"><%= listing.country %></p>
             </div>
         </div>
-        <div class="btns">
-            <a 
-                href="/listings/<%= listing._id %>/edit" 
-                class="btn btn-dark col-1 offset-3">
-                EDIT
-            </a> 
+        <% if(currentUser && currentUser._id.equals(listing.owner._id)) {%>
+            <div class="btns">
+                <a 
+                    href="/listings/<%= listing._id %>/edit" 
+                    class="btn btn-dark col-1 offset-3">
+                    EDIT
+                </a> 
 
-            <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
-                <button class="btn btn-danger offset-5">DELETE</button>
-            </form>
-        </div>
+                <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger offset-5">DELETE</button>
+                </form>
+            </div>
+        <% } %> 
         <div class="col-8 offset-3 mb-3">
+        <% if(currentUser) { %>
             <hr />
             <h4>RATE & REVIEW</h4>
             <form action="/listings/<%= listing.id%>/reviews" method="POST" novalidate class="needs-validation">
@@ -45,7 +48,7 @@
                 </div>
                 <button class="btn btn-outline-dark">SUBMIT</button>
             </form>
-
+        <% } %>
             <hr />
             <p><b>ALL REVIEWS</b></p>
             <div class="row">

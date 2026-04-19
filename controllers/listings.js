@@ -134,6 +134,3 @@ module.exports.destroyListing = async(req,res)=>{
 
 
 
-
-// <% if(currentUser && currentUser._id.equals(listing.owner._id)) {%> 
-// <% } %> 

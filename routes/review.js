@@ -3,11 +3,11 @@ const router = express.Router({mergeParams : true});
 const wrapAsync = require("../utils/wrapAsync.js");
 const Review = require("../models/review.js");
 const Listing = require("../models/listing.js");
-const {validateReview} = require("../middlewares.js");
+const {validateReview,isLoggedIn} = require("../middlewares.js");
 
 
 // CREATE REVIEW ROUTE
-router.post("/", validateReview, wrapAsync(async (req, res) => {
+router.post("/", isLoggedIn , validateReview, wrapAsync(async (req, res) => {
 
     // 1️⃣ Get listing ID from URL params
     const { id } = req.params;
@@ -17,6 +17,10 @@ router.post("/", validateReview, wrapAsync(async (req, res) => {
 
     // 3️⃣ Create a new review using form data
     const newReview = new Review(req.body.review);
+
+    // Assosiating authore to the review
+    newReview.author = req.user._id;
+    console.log(newReview);
 
     // 4️⃣ Add review reference to listing's reviews array
     listing.reviews.push(newReview);

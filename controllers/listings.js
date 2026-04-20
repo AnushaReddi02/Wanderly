@@ -25,7 +25,7 @@ module.exports.renderNewForm = (req,res)=>{
 module.exports.showListing = async(req,res)=>{
     let {id} = req.params;
     //Find the listing using id
-    const listing = await Listing.findById(id).populate("reviews").populate("owner"); //It gives entire listing not just id
+    const listing = await Listing.findById(id).populate({path : "reviews",populate:{path : "author"}}).populate("owner"); //It gives entire listing not just id
     res.render("listings/show.ejs",{listing});
 };
 

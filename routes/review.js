@@ -3,7 +3,7 @@ const router = express.Router({mergeParams : true});
 const wrapAsync = require("../utils/wrapAsync.js");
 const Review = require("../models/review.js");
 const Listing = require("../models/listing.js");
-const {validateReview,isLoggedIn} = require("../middlewares.js");
+const {validateReview,isLoggedIn, isReviewAuthor} = require("../middlewares.js");
 
 
 // CREATE REVIEW ROUTE
@@ -41,7 +41,7 @@ router.post("/", isLoggedIn , validateReview, wrapAsync(async (req, res) => {
 }));
 
 // DELETE REVIEW ROUTE
-router.delete("/:reviewId", wrapAsync(async (req, res) => {
+router.delete("/:reviewId", isLoggedIn , isReviewAuthor , wrapAsync(async (req, res) => {
 
     const { id, reviewId } = req.params;
 

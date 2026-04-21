@@ -5,14 +5,22 @@ const Listing = require("../models/listing.js");
 const {isLoggedIn,isOwner,validateListing} = require("../middlewares.js");
 const listingController = require("../controllers/listings.js");
 
+//To parse (multipart) form data
+const multer  = require('multer');
+
+//Multer will extract the files from form and saves the files in a file named uploads
+//Multer automatically creates that uploads file itself
+const upload = multer({ dest: 'uploads/' });
 
 router
    .route("/")
    .get(wrapAsync(listingController.index))  //Index Route
    //Create Route : Adds the newly created route to database
-   .post(isLoggedIn, validateListing, wrapAsync(listingController.createListing)
-    );
-
+   // .post(isLoggedIn, validateListing, wrapAsync(listingController.createListing)
+   //  );
+   .post(upload.single('listing[image]'), (req,res) => {
+      res.send(req.file);
+   });
 //New Route : Used to create a new listing
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 

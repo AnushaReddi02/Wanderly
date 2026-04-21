@@ -4,13 +4,14 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
 const {isLoggedIn,isOwner,validateListing} = require("../middlewares.js");
 const listingController = require("../controllers/listings.js");
+const {storage} = require("../cloudConfig.js");
 
 //To parse (multipart) form data
 const multer  = require('multer');
 
 //Multer will extract the files from form and saves the files in a file named uploads
 //Multer automatically creates that uploads file itself
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage }); //Uploads the files inside storage named folder in cloudinary
 
 router
    .route("/")

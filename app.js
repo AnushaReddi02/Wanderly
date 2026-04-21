@@ -28,6 +28,26 @@
 
 */
 
+// Check if the app is NOT running in production mode
+// (i.e., it's running locally on your laptop during development)
+if (process.env.NODE_ENV != "production") {
+    
+    // Load environment variables from a .env file into process.env
+    // This allows you to use things like DB URLs, API keys safely
+    require('dotenv').config();
+}
+
+
+/*
+        🔹 process.env.NODE_ENV
+        This tells your app what environment it is running in
+        Common values:
+        "development" → when you're coding locally
+        "production" → when app is deployed (like on a server)
+*/
+// console.log(process.env.SECRET);
+
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');

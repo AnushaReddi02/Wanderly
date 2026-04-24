@@ -17,11 +17,9 @@ router
    .route("/")
    .get(wrapAsync(listingController.index))  //Index Route
    //Create Route : Adds the newly created route to database
-   // .post(isLoggedIn, validateListing, wrapAsync(listingController.createListing)
-   //  );
-   .post(upload.single('listing[image]'), (req,res) => {
-      res.send(req.file);
-   });
+   .post(isLoggedIn, upload.single('listing[image]') ,  wrapAsync(listingController.createListing)
+    );
+    
 //New Route : Used to create a new listing
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 

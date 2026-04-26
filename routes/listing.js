@@ -17,7 +17,7 @@ router
    .route("/")
    .get(wrapAsync(listingController.index))  //Index Route
    //Create Route : Adds the newly created route to database
-   .post(isLoggedIn, upload.single('listing[image]') ,  wrapAsync(listingController.createListing)
+   .post(isLoggedIn, upload.single('listing[image]') , validateListing ,  wrapAsync(listingController.createListing)
     );
     
 //New Route : Used to create a new listing
@@ -28,7 +28,7 @@ router
    //Show Route : Show entire details of a specific listing(based on ID)
   .get(wrapAsync(listingController.showListing))
   //UPDATE ROUTE
-  .put(isLoggedIn,isOwner, wrapAsync(listingController.updateListing))
+  .put(isLoggedIn,isOwner, upload.single('listing[image]') , validateListing , wrapAsync(listingController.updateListing))
   //DELETE Route
   .delete(isLoggedIn,isOwner, wrapAsync(listingController.destroyListing));
 

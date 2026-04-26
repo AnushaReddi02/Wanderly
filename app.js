@@ -63,6 +63,9 @@ const User = require("./models/user.js");
 
 app.use(express.static(path.join(__dirname,"/public")));
 
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 
 //ROUTES
 const listingRouter = require("./routes/listing.js");

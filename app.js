@@ -55,6 +55,7 @@ const path =require('path');
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
 const session = require('express-session');
+const MongoStore = require('connect-mongo').default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -62,16 +63,6 @@ const User = require("./models/user.js");
 
 app.use(express.static(path.join(__dirname,"/public")));
 
-const sessionOptions = {
-    secret : "mysupersecretcode",
-    resave:false,
-    saveUninitialized : true,
-    cookie:{
-        expires:new Date(Date.now()+7*24*60*60*1000), //Set this cookie to expire 7 days from now,(7 * 24 * 60 * 60 * 1000->This converts 7 days → milliseconds)
-        maxAge : 7*24*60*60*1000,
-        httpOnly : true
-    }
-};
 
 //ROUTES
 const listingRouter = require("./routes/listing.js");
@@ -123,6 +114,66 @@ const PORT = process.env.PORT || 3000;
 //    console.log("Sample was saved");
 //    res.send("Sucessful testing");
 // })
+
+/*
+const store = MongoStore.create({
+    mongoUrl : MONGO_URL,
+    crypto : {
+        secret : "mysypersecretcode"
+    },
+    touchAfter : 24*3600
+});
+*/
+
+// Create a MongoDB session store
+const store = MongoStore.create({
+
+    // This is your MongoDB connection URL
+    // Example: "mongodb://127.0.0.1:27017/myDatabase"
+    // It tells the app where your database is
+    mongoUrl: MONGO_URL,
+
+    // This adds an extra layer of security
+    crypto: {
+        // Secret key used to encrypt session data
+        // Make sure to keep this safe and not hardcode in production
+        secret: "mysupersecretcode"
+    },
+
+    // This controls how often session data is updated in DB
+    // 24 * 3600 = 24 hours (in seconds)
+    // Meaning: session will only be updated once in 24 hours
+    // even if the user keeps interacting
+    // Helps reduce unnecessary database writes
+    touchAfter: 24 * 3600
+});
+
+// Listen for errors in the MongoDB session store
+store.on("error", (err) => {
+
+    // This runs whenever something goes wrong with the session store
+    // Example issues:
+    // - MongoDB server is down
+    // - Wrong database URL
+    // - Network connection problems
+
+    console.log("ERROR IN MONGO SESSION");
+
+    // Print the actual error details (VERY useful for debugging)
+    console.log(err);
+});
+const sessionOptions = {
+    store,
+    secret : "mysupersecretcode",
+    resave:false,
+    saveUninitialized : true,
+    cookie:{
+        expires:new Date(Date.now()+7*24*60*60*1000), //Set this cookie to expire 7 days from now,(7 * 24 * 60 * 60 * 1000->This converts 7 days → milliseconds)
+        maxAge : 7*24*60*60*1000,
+        httpOnly : true
+    }
+};
+
 
 app.use(session(sessionOptions));
 app.use(flash());

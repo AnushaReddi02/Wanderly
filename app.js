@@ -106,9 +106,9 @@ const PORT = process.env.PORT || 3000;
 
 
 
-app.get("/", (req,res)=>{
+/* app.get("/", (req,res)=>{
     res.send("Hi I am Home page!");
-});
+}); */
 
 // app.get("/testListing",async (req,res)=>{
 //     let sampleListing = new Listing({

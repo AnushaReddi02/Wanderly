@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node":"24.11.1"
+  },
   "name": "wanderly",
   "version": "1.0.0",
   "description": "",

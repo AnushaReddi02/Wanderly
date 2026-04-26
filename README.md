@@ -24,15 +24,6 @@ It provides a seamless experience for both travelers and property owners with fe
 - 📍 **Map Integration** – View property locations interactively  
 - 🎨 **Responsive UI** – Clean and modern interface using Bootstrap  
 
----
-
-## 🖼️ Screenshots
-
-### 📌 Listings Page
-![Listings Page](https://github.com/AnushaReddi02/Wanderly/blob/main/listingsPage.png?raw=true)
-
-### ➕ Add New Listing
-![Add Listing](https://github.com/AnushaReddi02/Wanderly/blob/main/Screenshot%202026-04-26%20191310.png?raw=true)
 
 ---
 
@@ -119,6 +110,18 @@ Edit/delete their own listings
 Post reviews
 
 ---
+
+## 🖼️ Screenshots
+
+### 📌 Listings Page
+![Listings Page](https://github.com/AnushaReddi02/Wanderly/blob/main/listingsPage.png?raw=true)
+
+### ➕ Add New Listing
+![Add Listing](https://github.com/AnushaReddi02/Wanderly/blob/main/Screenshot%202026-04-26%20191310.png?raw=true)
+
+---
+
+
 
 📌 Future Enhancements
 💳 Payment Integration (Stripe/Razorpay)

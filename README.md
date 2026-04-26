@@ -90,15 +90,18 @@ npm install
 ```
 3️⃣ Setup environment variables
 Create a .env file and add:
+
 ```
 MONGO_URL=your_mongodb_connection_string
 SESSION_SECRET=your_secret_key
 ```
 4️⃣ Run the app
+
 ```
 node app.js
 ```
 5️⃣ Open in browser
+
 ```
 http://localhost:3000
 ```
@@ -124,23 +127,23 @@ Post reviews
 
 
 📌 Future Enhancements
-💳 Payment Integration (Stripe/Razorpay)
-❤️ Wishlist / Favorites
-🔍 Advanced Filters & Search
-📱 Mobile responsiveness improvements
-🧑‍💼 Admin dashboard
-🤝 Contributing
+ 💳 Payment Integration (Stripe/Razorpay) <br>
+ ❤️ Wishlist / Favorites <br>
+ 🔍 Advanced Filters & Search <br>
+ 📱 Mobile responsiveness improvements <br>
+ 🧑‍💼 Admin dashboard <br>
+ 🤝 Contributing <br>
 
 ---
 
 Contributions are always welcome!
 
 Fork the repo
-Create a new branch (feature-name)
-Commit your changes
-Push to your branch
-Open a Pull Request
-📄 License
+- Create a new branch (feature-name)
+- Commit your changes
+- Push to your branch
+- Open a Pull Request
+-📄 License
 
 This project is licensed under the MIT License.
 
@@ -148,7 +151,7 @@ This project is licensed under the MIT License.
 
 👩‍💻 Author
 
-Anusha Reddi
+Anusha Reddi <br>
 🔗 GitHub: https://github.com/AnushaReddi02
 
 💡 Inspiration

@@ -6,6 +6,14 @@ It provides a seamless experience for both travelers and property owners with fe
 
 ---
 
+## 🚀 Live Demo
+
+🔗 **Live Site:** https://wanderly-16o5.onrender.com  
+
+🔗 **GitHub Repository:** https://github.com/AnushaReddi02/Wanderly  
+
+---
+
 ## ✨ Features
 
 - 🏡 **Explore Listings** – Browse various travel stays with images and details  

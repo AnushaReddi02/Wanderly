@@ -23,7 +23,7 @@ It provides a seamless experience for both travelers and property owners with fe
 ![Add Listing](https://github.com/AnushaReddi02/Wanderly/blob/main/images/Create%20Listing.png?raw=true)
 
 ### ⭐ Reviews Section
-![Add Listing](https://github.com/AnushaReddi02/Wanderly/blob/main/images/Create%20Listing.png?raw=true)
+![Add Listing](https://github.com/AnushaReddi02/Wanderly/blob/main/images/Listing%20and%20reviews.png?raw=true)
 
 ---
 

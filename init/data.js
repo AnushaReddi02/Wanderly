@@ -23,7 +23,7 @@ const sampleListings = [
     price: 1200,
     location: "New York City",
     country: "United States",
-    owner:"Isabella Cruz
+    owner:"Isabella Cruz"
   },
   {
     title: "Mountain Retreat",

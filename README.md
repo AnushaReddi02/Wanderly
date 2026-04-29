@@ -14,6 +14,19 @@ It provides a seamless experience for both travelers and property owners with fe
 
 ---
 
+## 🖼️ Screenshots
+
+### 📌 Listings Page
+![Listings Page](https://github.com/AnushaReddi02/Wanderly/blob/main/images/Listings%20page.png?raw=true)
+
+### ➕ Add New Listing
+![Add Listing](https://github.com/AnushaReddi02/Wanderly/blob/main/images/Create%20Listing.png?raw=true)
+
+### ⭐ Reviews Section
+![Add Listing](https://github.com/AnushaReddi02/Wanderly/blob/main/images/Listing%20and%20reviews.png?raw=true)
+
+---
+
 ## ✨ Features
 
 - 🏡 **Explore Listings** – Browse various travel stays with images and details  
@@ -114,27 +127,16 @@ Post reviews
 
 ---
 
-## 🖼️ Screenshots
-
-### 📌 Listings Page
-![Listings Page](https://github.com/AnushaReddi02/Wanderly/blob/main/listingsPage.png?raw=true)
-
-### ➕ Add New Listing
-![Add Listing](https://github.com/AnushaReddi02/Wanderly/blob/main/Screenshot%202026-04-26%20191310.png?raw=true)
-
----
-
-
-
 📌 Future Enhancements
  💳 Payment Integration (Stripe/Razorpay) <br>
  ❤️ Wishlist / Favorites <br>
  🔍 Advanced Filters & Search <br>
  📱 Mobile responsiveness improvements <br>
  🧑‍💼 Admin dashboard <br>
- 🤝 Contributing <br>
 
 ---
+
+##  🤝 Contributing
 
 Contributions are always welcome!
 
